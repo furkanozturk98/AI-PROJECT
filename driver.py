@@ -1,162 +1,151 @@
-# f = open("sudokus_start.txt", "r")
 import sys
 from BTS import BTS
-l = []
-"""
-for i in f:
-    counter = 1
-    for j in i:
-        if(counter <= 9):
-            print(j,end=" ")
-            counter = counter +1
-        else:
-            print()
-            counter = 2
-            print(j,end=" ")"""
+import time
+from SudokuGenerator import SudokuGenerator
+import tkinter as tk
+from tkinter import messagebox
+class driver:
 
-"""
-for i in f:
-    counter = 1
-    TepList=[]
-    for j in i:
-        if(counter <= 9):
-            TepList.append(int(j))
-            counter = counter +1
-        else:
-            l.append(TepList.copy())
-            TepList.clear()
-            TepList.append(int(j))
-            counter = 2
-    l.append(TepList.copy())
-f.close()"""
-
-
-def readFile():
-    #f = open("sudokus_start.txt", 'r').read().split('\n')
-    with open(sys.argv[1], 'r') as f:
-        sudokus = []
-        for i in f:
-            i = i.rstrip('\n')
-            sudokus.append(i)
-    return sudokus
-
-
-def readSudoku(index):
-    sudokus = readFile()
-    
-    counter = 1
-    TepList = []
-    for j in sudokus[index]:
-        if(counter <= 9):
-            TepList.append(int(j))
-            counter = counter + 1
-        else:
-            l.append(TepList.copy())
-            TepList.clear()
-            TepList.append(int(j))
-            counter = 2
-    l.append(TepList.copy())
-    return l
-
-"""
-board = [
-    [8, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 3, 6, 0, 0, 0, 0, 0],
-    [0, 7, 0, 0, 9, 0, 2, 0, 0],
-    [0, 5, 0, 0, 0, 7, 0, 0, 0],
-    [0, 0, 0, 0, 4, 5, 7, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0, 3, 0],
-    [0, 0, 1, 0, 0, 0, 0, 6, 8],
-    [0, 0, 8, 5, 0, 0, 0, 1, 0],
-    [0, 9, 0, 0, 0, 0, 4, 0, 0]
-]
-
-
-def solve(bo):
-    find = find_empty(bo)
-    if not find:  # if find is None or False
-        return True
-    else:
-        row, col = find
-
-    for num in range(1, 10):
-        if valid(bo, num, (row, col)):
-            bo[row][col] = num
-
-            if solve(bo):
-                return True
-
-            bo[row][col] = 0
-
-    return False
-
-
-def valid(bo, num, pos):
-
-    # Check row
-    for i in range(len(bo[0])):
-        if bo[pos[0]][i] == num and pos[1] != i:
-            return False
-
-    # Check column
-    for i in range(len(bo)):
-        if bo[i][pos[1]] == num and pos[0] != i:
-            return False
-
-    # Check box
-    box_x = pos[1] // 3
-    box_y = pos[0] // 3
-
-    for i in range(box_y*3, box_y*3 + 3):
-        for j in range(box_x*3, box_x*3 + 3):
-            if bo[i][j] == num and (i, j) != pos:
-                return False
-
-    return True
-
-
-def print_board(bo):
-    for i in range(len(bo)):
-        if i % 3 == 0:
-            if i == 0:
-                print(" ┎─────────┰─────────┰─────────┒")
-            else:
-                print(" ┠─────────╂─────────╂─────────┨")
-
-        for j in range(len(bo[0])):
-            if j % 3 == 0:
-                print(" ┃ ", end=" ")
-
-            if j == 8:
-                print(bo[i][j], " ┃")
-            else:
-                print(bo[i][j], end=" ")
-
-    print(" ┖─────────┸─────────┸─────────┚")
-
-
-def find_empty(bo):
-    for i in range(len(bo)):
-        for j in range(len(bo[0])):
-            if bo[i][j] == 0:
-                return i, j  # row, column
-
-    return None
-"""
-
-def main():
-
+    sudokuList = []
     bts = BTS()
-    l = readSudoku(2)
-    bts.print_board(l)
-    print('\n--------------------------------------\n')
-    print(bts.solve(l))
-    bts.print_board(l)
+    N = 9
+    K = 55
+    sudoku = SudokuGenerator(N,K)
+    sudoku.fillValues()
+
+    def readFile(self):
+        with open(sys.argv[1], 'r') as f:
+            sudokus = []
+            for i in f:
+                i = i.rstrip('\n')
+                sudokus.append(i)
+        return sudokus
 
 
+    def readSudoku(self,index):
+        sudokus = self.readFile()
+    
+        counter = 1
+        TempList = []
+        for j in sudokus[index]:
+            if(counter <= 9):
+                TempList.append(int(j))
+                counter = counter + 1
+            else:
+                self.sudokuList.append(TempList.copy())
+                TempList.clear()
+                TempList.append(int(j))
+                counter = 2
+        self.sudokuList.append(TempList.copy())
+        return self.sudokuList
+
+    my_window = tk.Tk()
+    my_window.geometry('430x500')
+    canvas = tk.Canvas(my_window, width = 360, height = 360, bg = "white")
+    canvas.pack(side = "top")
+    labels = {}
+    button1 = None
+    button2 = None
+    
+
+    def paint(self,sudoku):
+        
+        sudokuList = sudoku.getSudoku()
+       
+        
+        
+
+        coloredBoxes = [
+            (0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2),
+            (0,6),(0,7),(0,8),(1,6),(1,7),(1,8),(2,6),(2,7),(2,8),
+            (3,3),(3,4),(3,5),(4,3),(4,4),(4,5),(5,3),(5,4),(5,5),
+            (6,0),(6,1),(6,2),(7,0),(7,1),(7,2),(8,0),(8,1),(8,2),
+            (6,6),(6,7),(6,8),(7,6),(7,7),(7,8),(8,6),(8,7),(8,8),
+                        ]
+
+        for i in range(9):
+            TempList = []
+            mylabel = None
+            for j in range(9):
+                
+                
+                if (i,j) in coloredBoxes :
+                    self.canvas.create_rectangle(0+(j*40),0+(i*40),40+(j*40), 40+(i*40),fill="turquoise")
+                    mylabel = self.canvas.create_text(0+(j*30),0+(i*30),fill="black",font="Times 10",text="")
+              
+              
+                self.canvas.create_rectangle(0+(j*40),0+(i*40),40+(j*40), 40+(i*40))
+                mylabel = self.canvas.create_text(20+(j*40),20+(i*40), fill="black",font="Times 13",text="") 
+
+                TempList.append(mylabel)
+            self.labels[i] = TempList    
+        
+        
+        
+
+        for i in range(9):
+            for j in range(9):
+            
+                self.canvas.itemconfig(self.labels[i][j], text = sudokuList[i][j] )
+
+        self.canvas.grid(padx=30,pady=10)
+
+        self.button1 = tk.Button(self.my_window, command= lambda: self.buttonClick(sudoku) ,text = "Solve",height = 3, width = 10)
+        self.button2 = tk.Button(self.my_window, command= self.refreshbuttonClick ,text = "Refresh",height = 3, width = 10)
+        self.button1.place(x=120,y=400)
+        self.button2.place(x=220,y=400)
+        
+        self.my_window.mainloop()
+
+    def refreshbuttonClick(self):
+        print("hello")
+        self.sudoku = SudokuGenerator(self.N,self.K)
+        self.sudoku.fillValues()
+        self.bts.print_board(self.sudoku)
+
+        sudokuList = self.sudoku.getSudoku()
+        for i in range(9):
+            for j in range(9):
+            
+                self.canvas.itemconfig(self.labels[i][j], text = sudokuList[i][j]  )
+
+        self.button1.config(state="normal")
 
 
+    def buttonClick(self,sudoku):
+        
+        sudokuList = sudoku.getSudoku()
+
+        print('\n--------------------------------------\n')
+        start = time.time()
+        self.bts.solve(self.sudoku)
+
+        self.bts.print_board(self.sudoku)
+
+        for i in range(9):
+            for j in range(9):
+            
+                self.canvas.itemconfig(self.labels[i][j], text = sudokuList[i][j]  )
+        
+        print ("Time: ", round(time.time() - start,2), "seconds.")
+
+        self.button1.config(state="disabled")
+
+        tk.messagebox.showinfo("Execution Time", str(round(time.time() - start,2)) + " seconds.")
 
 
-if __name__ == '__main__':
-    main()
+    def main(self):
+    
+        #sudokuList = readSudoku(1)
+
+
+        self.bts.print_board(self.sudoku)
+        self.paint(self.sudoku)
+
+        
+        
+        
+
+
+driver = driver()
+driver.main()

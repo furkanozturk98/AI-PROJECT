@@ -1,28 +1,19 @@
+ 
 class BTS:
 
-    def solve(self,bo):
-        find = self.find_empty(bo)
-        if not find:  # if find is None or False
-            return True
-        else:
-            row, col = find
+    def find_empty(self,bo):
+        for i in range(len(bo)):
+            for j in range(len(bo[0])):
+                if bo[i][j] == 0:
+                    return i, j  # row, column
 
-        for num in range(1, 10):
-            if self.valid(bo, num, (row, col)):
-                bo[row][col] = num
-
-                if self.solve(bo):
-                    return True
-
-            bo[row][col] = 0
-
-        return False
+        return None
 
     def valid(self,bo, num, pos):
 
         # Check row
         for i in range(len(bo[0])):
-            if bo[pos[0]][i] == num and pos[1] != i:
+            if bo[pos[0]][i] == num and pos[1] != i: 
                 return False
 
     # Check column
@@ -39,9 +30,32 @@ class BTS:
                 if bo[i][j] == num and (i, j) != pos:
                     return False
 
-        return True
+        return True    
 
-    def print_board(self,bo):
+    def solve(self,sudoku):
+        bo = sudoku.getSudoku()
+        find = self.find_empty(bo)
+        if not find:  # if find is None or False
+            return True
+        else:
+            row, col = find
+
+        for num in range(1, 10):
+            if self.valid(bo, num, (row, col)):
+                bo[row][col] = num
+
+                if self.solve(sudoku):
+                    return True
+
+            bo[row][col] = 0
+
+        return False
+
+    
+
+    def print_board(self,sudoku):
+        bo = sudoku.getSudoku()
+
         for i in range(len(bo)):
             if i % 3 == 0:
                 if i == 0:
@@ -61,10 +75,4 @@ class BTS:
         print(" ┖─────────┸─────────┸─────────┚")
 
 
-    def find_empty(self,bo):
-        for i in range(len(bo)):
-            for j in range(len(bo[0])):
-                if bo[i][j] == 0:
-                    return i, j  # row, column
-
-        return None
+    
