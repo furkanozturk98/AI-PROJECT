@@ -2,8 +2,8 @@ import math
 import random
 import time
 class SudokuGenerator():
-    N = 0
-    K = 0
+    N = None
+    K = None
     SRN = 0
     mat = [0] * 9
     def __init__(self,N,K):
@@ -150,6 +150,13 @@ class SudokuGenerator():
 
     def getSudoku(self):
         return self.mat
+
+    def getSudokuAsString(self):
+        output = ""
+        for i in range(9):
+            for j in range(9):
+                output += str(self.mat[i][j])
+        return output
 
 
 

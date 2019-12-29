@@ -32,8 +32,7 @@ class BTS:
 
         return True    
 
-    def solve(self,sudoku):
-        bo = sudoku.getSudoku()
+    def solve(self,bo):
         find = self.find_empty(bo)
         if not find:  # if find is None or False
             return True
@@ -44,7 +43,7 @@ class BTS:
             if self.valid(bo, num, (row, col)):
                 bo[row][col] = num
 
-                if self.solve(sudoku):
+                if self.solve(bo):
                     return True
 
             bo[row][col] = 0
@@ -53,8 +52,7 @@ class BTS:
 
     
 
-    def print_board(self,sudoku):
-        bo = sudoku.getSudoku()
+    def print_board(self,bo):
 
         for i in range(len(bo)):
             if i % 3 == 0:
